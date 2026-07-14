@@ -372,10 +372,11 @@ function render(){
 
   const full = [...candles];
   if (currentCandle) full.push(currentCandle);
+  drawChart(full);
+
   if (full.length < 30){
     document.getElementById('sigNote').textContent =
       `Building history — ${full.length}/30 minimum 5-minute bars loaded.`;
-    drawChart(full);
     return;
   }
 
