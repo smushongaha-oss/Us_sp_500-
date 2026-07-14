@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>V75 Rise/Fall Signal</title>
+<title>V75 Rise/Fall Signal — 5 Minute</title>
 <style>
   :root{
     --bg:#0a0c10;
@@ -34,7 +34,6 @@
   }
   .wrap{max-width:920px; margin:0 auto;}
 
-  /* header */
   header{
     display:flex; align-items:center; justify-content:space-between;
     margin-bottom:18px; flex-wrap:wrap; gap:10px;
@@ -58,7 +57,6 @@
   .dot.live{background:var(--up); box-shadow:0 0 8px var(--up-glow);}
   .dot.down{background:var(--down); box-shadow:0 0 8px var(--down-glow);}
 
-  /* price ticker strip */
   .ticker{
     display:flex; align-items:baseline; gap:14px;
     background:var(--panel); border:1px solid var(--line); border-radius:12px;
@@ -68,7 +66,6 @@
   .ticker .chg{font-family:var(--mono); font-size:14px; font-weight:600;}
   .ticker .meta{margin-left:auto; text-align:right; font-family:var(--mono); font-size:11px; color:var(--dim); line-height:1.6;}
 
-  /* main grid */
   .grid{display:grid; grid-template-columns:1.1fr 1fr; gap:14px; margin-bottom:14px;}
   @media(max-width:760px){.grid{grid-template-columns:1fr;}}
 
@@ -81,7 +78,6 @@
     margin-bottom:14px; font-weight:600;
   }
 
-  /* signal card */
   .signal-card{display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:230px;}
   .gauge-wrap{position:relative; width:170px; height:170px; margin-bottom:6px;}
   .gauge-wrap svg{transform:rotate(-90deg);}
@@ -95,7 +91,6 @@
   .gauge-conf{font-family:var(--mono); font-size:12px; color:var(--dim); margin-top:3px;}
   .signal-note{font-family:var(--mono); font-size:11px; color:var(--dim); margin-top:10px; max-width:260px; line-height:1.5;}
 
-  /* indicators list */
   .ind-row{
     display:flex; align-items:center; justify-content:space-between;
     padding:10px 0; border-bottom:1px solid var(--line);
@@ -111,7 +106,6 @@
   .tag-down{background:rgba(255,90,110,0.12); color:var(--down); border:1px solid rgba(255,90,110,0.3);}
   .tag-flat{background:rgba(122,130,150,0.12); color:var(--dim); border:1px solid var(--line);}
 
-  /* chart card */
   .chart-card{grid-column:1 / -1;}
   #chartCanvas{width:100%; height:200px; display:block;}
   .chart-legend{display:flex; gap:16px; margin-top:10px; font-family:var(--mono); font-size:10px; color:var(--dim);}
@@ -123,9 +117,6 @@
     padding:14px 10px 4px; line-height:1.6;
   }
   footer b{color:var(--dim);}
-
-  .flash{animation:flash 0.5s ease;}
-  @keyframes flash{0%{background:rgba(47,211,154,0.15);} 100%{background:transparent;}}
 </style>
 </head>
 <body>
@@ -136,7 +127,7 @@
       <div class="mark">75</div>
       <div>
         <h1>Volatility 75 — Rise/Fall Signal</h1>
-        <div class="sub">M1 composite scoring · live tick feed</div>
+        <div class="sub">M5 composite scoring · live 5-minute candles</div>
       </div>
     </div>
     <div class="status"><span class="dot" id="connDot"></span><span id="connText">connecting…</span></div>
@@ -148,7 +139,7 @@
       <div class="chg" id="chg">–</div>
     </div>
     <div class="meta">
-      <div>SYMBOL <b style="color:var(--text)">R_75</b></div>
+      <div>SYMBOL <b style="color:var(--text)">R_75</b> · TF <b style="color:var(--text)">5m</b></div>
       <div id="lastTick">last tick —</div>
     </div>
   </div>
@@ -167,7 +158,7 @@
           <div class="gauge-conf" id="sigConf">score 0</div>
         </div>
       </div>
-      <div class="signal-note" id="sigNote">Gathering candles — signal activates once enough M1 history is built.</div>
+      <div class="signal-note" id="sigNote">Loading 5-minute candle history…</div>
     </div>
 
     <div class="card">
@@ -182,7 +173,7 @@
     </div>
 
     <div class="card chart-card">
-      <h2>M1 Candles (last 40)</h2>
+      <h2>M5 Candles (last 40)</h2>
       <canvas id="chartCanvas"></canvas>
       <div class="chart-legend">
         <span><i class="sw" style="background:var(--up)"></i>up close</span>
@@ -194,18 +185,20 @@
 
   <footer>
     Educational signal tool only — not financial advice. Synthetic index price action is randomized;<br>
-    no indicator gives a durable statistical edge on 1–2min binary duration. <b>Trade demo / size accordingly.</b>
+    no indicator gives a durable statistical edge on short binary duration. <b>Trade demo / size accordingly.</b>
   </footer>
 
 </div>
 
 <script>
 const SYMBOL = "R_75";
-const APP_ID = 1089; // Deriv public demo app_id for market data
+const APP_ID = 1089;         // Deriv public demo app_id for market data
+const GRANULARITY = 300;     // 5 minutes, in seconds
+
 let ws;
-let candles = [];      // {time, open, high, low, close}
-let currentCandle = null;
-let lastTicks = [];    // rolling last N tick prices for momentum
+let candles = [];            // completed {epoch, open, high, low, close}
+let currentCandle = null;    // the forming (live) candle
+let lastTicks = [];          // rolling raw tick prices for momentum
 let lastPrice = null, prevPrice = null;
 
 const connDot = document.getElementById('connDot');
@@ -220,7 +213,15 @@ function connect(){
   ws.onopen = () => {
     connDot.className = 'dot live';
     connText.textContent = 'live';
-    ws.send(JSON.stringify({ ticks_history: SYMBOL, adjust_start_time: 1, count: 400, end: "latest", start: 1, style: "ticks" }));
+    ws.send(JSON.stringify({
+      ticks_history: SYMBOL,
+      style: "candles",
+      granularity: GRANULARITY,
+      count: 200,
+      end: "latest",
+      subscribe: 1
+    }));
+    ws.send(JSON.stringify({ ticks: SYMBOL, subscribe: 1 }));
   };
 
   ws.onclose = () => {
@@ -234,11 +235,12 @@ function connect(){
   ws.onmessage = (msg) => {
     const data = JSON.parse(msg.data);
 
-    if (data.msg_type === 'history') {
-      const prices = data.history.prices;
-      const times = data.history.times;
-      buildCandlesFromHistory(times, prices);
-      ws.send(JSON.stringify({ ticks: SYMBOL, subscribe: 1 }));
+    if (data.msg_type === 'candles') {
+      buildCandlesFromHistory(data.candles);
+    }
+
+    if (data.msg_type === 'ohlc' && data.ohlc) {
+      handleOhlc(data.ohlc);
     }
 
     if (data.msg_type === 'tick' && data.tick) {
@@ -247,24 +249,38 @@ function connect(){
   };
 }
 
-function buildCandlesFromHistory(times, prices){
-  candles = [];
-  let bucket = null;
-  for (let i=0;i<times.length;i++){
-    const t = times[i], p = prices[i];
-    const minute = Math.floor(t/60)*60;
-    if (!bucket || bucket.time !== minute){
-      if (bucket) candles.push(bucket);
-      bucket = {time:minute, open:p, high:p, low:p, close:p};
-    } else {
-      bucket.high = Math.max(bucket.high, p);
-      bucket.low = Math.min(bucket.low, p);
-      bucket.close = p;
-    }
-  }
-  if (bucket) candles.push(bucket);
+function buildCandlesFromHistory(rawCandles){
+  candles = rawCandles.map(c => ({
+    epoch: c.epoch,
+    open: parseFloat(c.open),
+    high: parseFloat(c.high),
+    low: parseFloat(c.low),
+    close: parseFloat(c.close)
+  }));
   currentCandle = candles.pop() || null;
-  lastPrice = prices[prices.length-1];
+  if (currentCandle) lastPrice = currentCandle.close;
+  render();
+}
+
+function handleOhlc(o){
+  const epoch = parseInt(o.open_time, 10);
+  const c = {
+    epoch,
+    open: parseFloat(o.open),
+    high: parseFloat(o.high),
+    low: parseFloat(o.low),
+    close: parseFloat(o.close)
+  };
+
+  if (!currentCandle || currentCandle.epoch !== epoch){
+    if (currentCandle) {
+      candles.push(currentCandle);
+      if (candles.length > 300) candles.shift();
+    }
+    currentCandle = c;
+  } else {
+    currentCandle = c;
+  }
   render();
 }
 
@@ -274,17 +290,6 @@ function handleTick(price, epoch){
 
   lastTicks.push(price);
   if (lastTicks.length > 20) lastTicks.shift();
-
-  const minute = Math.floor(epoch/60)*60;
-  if (!currentCandle || currentCandle.time !== minute){
-    if (currentCandle) candles.push(currentCandle);
-    if (candles.length > 200) candles.shift();
-    currentCandle = {time:minute, open:price, high:price, low:price, close:price};
-  } else {
-    currentCandle.high = Math.max(currentCandle.high, price);
-    currentCandle.low = Math.min(currentCandle.low, price);
-    currentCandle.close = price;
-  }
 
   const d = new Date(epoch*1000);
   lastTickEl.textContent = 'last tick ' + d.toLocaleTimeString();
@@ -335,11 +340,6 @@ function macd(values){
 
 function stochastic(cArr, period=14, smoothK=3){
   if (cArr.length < period) return null;
-  const recent = cArr.slice(-period);
-  const highs = recent.map(c=>c.high), lows = recent.map(c=>c.low);
-  const hh = Math.max(...highs), ll = Math.min(...lows);
-  const close = cArr[cArr.length-1].close;
-  const k = hh===ll ? 50 : ((close-ll)/(hh-ll))*100;
   const kSeries = [];
   for (let i=cArr.length-smoothK; i<cArr.length; i++){
     if (i<period-1) continue;
@@ -348,6 +348,10 @@ function stochastic(cArr, period=14, smoothK=3){
     const kk = h===l ? 50 : ((seg[seg.length-1].close-l)/(h-l))*100;
     kSeries.push(kk);
   }
+  const seg = cArr.slice(-period);
+  const h = Math.max(...seg.map(c=>c.high)), l = Math.min(...seg.map(c=>c.low));
+  const close = cArr[cArr.length-1].close;
+  const k = h===l ? 50 : ((close-l)/(h-l))*100;
   const d = kSeries.length ? kSeries.reduce((a,b)=>a+b,0)/kSeries.length : k;
   return { k, d };
 }
@@ -370,7 +374,7 @@ function render(){
   if (currentCandle) full.push(currentCandle);
   if (full.length < 30){
     document.getElementById('sigNote').textContent =
-      `Gathering candles — ${full.length}/30 minimum M1 bars built. Signal will activate shortly.`;
+      `Building history — ${full.length}/30 minimum 5-minute bars loaded.`;
     drawChart(full);
     return;
   }
@@ -439,10 +443,10 @@ function updateGauge(score){
   let label, color, note;
   if (score >= 35){
     label='RISE'; color='var(--up)';
-    note = `Bullish confluence across ${countAligned(score)} indicators. Consider a short-duration Rise contract; re-check before entry.`;
+    note = `Bullish confluence across ${countAligned(score)} indicators on the 5m chart. Consider a 5-minute Rise contract; re-check before entry.`;
   } else if (score <= -35){
     label='FALL'; color='var(--down)';
-    note = `Bearish confluence across ${countAligned(score)} indicators. Consider a short-duration Fall contract; re-check before entry.`;
+    note = `Bearish confluence across ${countAligned(score)} indicators on the 5m chart. Consider a 5-minute Fall contract; re-check before entry.`;
   } else {
     label='WAIT'; color='var(--wait)';
     note = `Indicators are mixed (score ${score}). No clean confluence — sitting out reduces noise-driven losses.`;
