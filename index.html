@@ -31,12 +31,9 @@
         border-bottom: 1px solid #2a3444;
         padding-bottom: 15px;
         margin-bottom: 20px;
-        flex-wrap: wrap;
-        gap: 10px;
     }
     .header h2 { margin: 0; font-size: 1.2em; }
     .status-badge {
-        display: inline-block;
         padding: 4px 12px;
         border-radius: 20px;
         font-size: 0.85em;
@@ -48,33 +45,13 @@
     .status-badge.disconnected { background-color: #f44336; color: #fff; }
     .status-badge.trading { background-color: #e91e63; color: #fff; }
 
-    .login-box {
-        text-align: center;
-        padding: 50px 20px;
-        background: #232d3b;
-        border-radius: 12px;
-        margin-bottom: 20px;
-    }
-    .login-btn {
-        background: #ff444f;
-        color: white;
-        border: none;
-        padding: 16px 40px;
-        font-size: 1.15em;
-        font-weight: bold;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-    .login-btn:hover { background: #e03942; transform: scale(1.03); }
-
     label {
         font-size: 0.8em;
         color: #90a4ae;
         display: block;
         margin-bottom: 4px;
     }
-    select, input[type=number], input[type=text] {
+    select, input {
         background-color: #232d3b;
         color: #fff;
         border: 1px solid #2a3444;
@@ -82,6 +59,7 @@
         padding: 8px;
         font-size: 0.95em;
         width: 100%;
+        margin-bottom: 10px;
     }
 
     .digit-grid {
@@ -101,7 +79,7 @@
     .digit-cell .digit-value { font-weight: bold; font-size: 1.05em; margin-top: 2px; }
     .digit-cell.hot { border-color: #f44336; background: #3a1c1c; }
     .digit-cell.cold { border-color: #4caf50; background: #1b3a1f; }
-    .digit-cell.best { border-color: #ffeb3b; background: #3a3510; box-shadow: 0 0 10px rgba(255,235,59,0.45); }
+    .digit-cell.best { border-color: #ffeb3b; background: #3a3510; box-shadow: 0 0 8px rgba(255,235,59,0.4); }
 
     details.settings {
         background-color: #202836;
@@ -116,9 +94,8 @@
         color: #90caf9;
         list-style: none;
     }
-    details.settings summary::-webkit-details-marker { display: none; }
     .settings-body {
-        padding: 0 16px 16px 16px;
+        padding: 0 16px 16px;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
@@ -128,32 +105,23 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: #232d3b;
+        background: #232d3b;
         padding: 8px 12px;
         border-radius: 6px;
         font-size: 0.9em;
     }
-    .toggle-row input { width: auto; }
     button.apply-btn {
         grid-column: 1 / -1;
-        background-color: #1565c0;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        padding: 10px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    button.apply-btn:hover { background-color: #1976d2; }
-    button.logout-btn {
-        background: #b71c1c;
+        background: #1565c0;
         color: white;
         border: none;
-        padding: 8px 16px;
         border-radius: 6px;
+        padding: 12px;
+        font-weight: bold;
         cursor: pointer;
-        font-size: 0.9em;
+        font-size: 1em;
     }
+    button.apply-btn:hover { background: #1976d2; }
 
     .warning-box {
         background: #3e2723;
@@ -163,7 +131,6 @@
         border-radius: 8px;
         font-size: 0.82em;
         margin-bottom: 14px;
-        line-height: 1.4;
     }
 
     .chart-box {
@@ -173,21 +140,10 @@
         overflow: hidden;
         border: 1px solid #2a3444;
         margin-bottom: 14px;
-        background-color: #131722;
+        background: #131722;
         position: relative;
     }
-    .chart-box canvas { display: block; width: 100%; height: 100%; }
-    .chart-range-label {
-        position: absolute;
-        right: 8px;
-        font-size: 0.72em;
-        color: #607d8b;
-        background-color: rgba(19, 23, 34, 0.7);
-        padding: 2px 6px;
-        border-radius: 4px;
-    }
-    .chart-range-max { top: 8px; }
-    .chart-range-min { bottom: 8px; }
+    .chart-box canvas { width: 100%; height: 100%; display: block; }
     .chart-empty-msg {
         position: absolute;
         inset: 0;
@@ -199,7 +155,7 @@
     }
 
     .price-card {
-        background-color: #232d3b;
+        background: #232d3b;
         padding: 14px;
         border-radius: 8px;
         text-align: center;
@@ -220,9 +176,9 @@
         font-weight: bold;
         margin: 10px 0;
     }
-    .signal-neutral { background-color: #2e3846; color: #b0bec5; }
-    .signal-over { background-color: #1b5e20; color: #81c784; border: 2px solid #4caf50; }
-    .signal-under { background-color: #b71c1c; color: #ef9a9a; border: 2px solid #f44336; }
+    .signal-neutral { background: #2e3846; color: #b0bec5; }
+    .signal-over { background: #1b5e20; color: #81c784; border: 2px solid #4caf50; }
+    .signal-under { background: #b71c1c; color: #ef9a9a; border: 2px solid #f44336; }
 
     .info-row {
         display: grid;
@@ -249,7 +205,7 @@
         background: #1a2332;
         border-radius: 8px;
         padding: 10px;
-        max-height: 150px;
+        max-height: 140px;
         overflow-y: auto;
         font-size: 0.78em;
         margin-top: 10px;
@@ -265,34 +221,26 @@
         margin-bottom: 8px;
     }
     .history-header h3 { margin: 0; font-size: 1em; color: #90caf9; }
-    table.history-table {
+    table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.8em;
     }
-    table.history-table th, table.history-table td {
+    th, td {
         padding: 6px 8px;
         text-align: center;
         border-bottom: 1px solid #2a3444;
     }
-    table.history-table th { color: #90a4ae; }
+    th { color: #90a4ae; }
     .dir-over { color: #81c784; font-weight: bold; }
     .dir-under { color: #ef9a9a; font-weight: bold; }
-    .empty-history { color: #607d8b; text-align: center; padding: 12px; font-size: 0.85em; }
 
-    #logConsole {
-        margin-top: 12px;
-        font-size: 0.8em;
-        color: #ff8a80;
-        text-align: center;
-    }
     .disclaimer {
         margin-top: 14px;
         font-size: 0.72em;
         color: #607d8b;
         text-align: center;
     }
-    .hidden { display: none !important; }
 </style>
 </head>
 <body>
@@ -300,145 +248,122 @@
 <div class="container">
     <div class="header">
         <h2>Over/Under Auto-Trade</h2>
-        <span id="connectionStatus" class="status-badge disconnected">Not logged in</span>
+        <span id="connectionStatus" class="status-badge disconnected">Disconnected</span>
     </div>
 
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen" class="login-box">
-        <h3 style="margin-top:0; margin-bottom:10px;">Login with Deriv</h3>
-        <p style="color:#90a4ae; margin-bottom:30px;">You will be redirected to Deriv’s official login page</p>
-        <button class="login-btn" id="loginBtn">Login with Deriv</button>
+    <div class="warning-box">
+        ⚠️ <strong>Use DEMO account first!</strong><br>
+        Paste your API Token below. Auto-Trade will buy real contracts when a signal is confirmed.
     </div>
 
-    <!-- MAIN BOT -->
-    <div id="botScreen" class="hidden">
-
-        <div class="warning-box">
-            ⚠️ <strong>Use DEMO account first!</strong><br>
-            Auto-Trade buys real 1-tick contracts when a signal is confirmed.
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <div id="accountInfo" style="font-size:0.9em; color:#81c784;"></div>
-            <button class="logout-btn" id="logoutBtn">Logout</button>
-        </div>
-
-        <div style="margin-bottom:14px;">
-            <label>Symbol</label>
-            <select id="symbolSelect">
-                <option value="R_10">Volatility 10</option>
-                <option value="R_25">Volatility 25</option>
-                <option value="R_50">Volatility 50</option>
-                <option value="R_75" selected>Volatility 75</option>
-                <option value="R_100">Volatility 100</option>
-                <option value="1HZ75V">Volatility 75 (1s)</option>
-                <option value="1HZ100V">Volatility 100 (1s)</option>
-            </select>
-        </div>
-
-        <details class="settings">
-            <summary>Trading Settings</summary>
-            <div class="settings-body">
-                <div>
-                    <label>Stake</label>
-                    <input type="number" id="stake" min="0.35" step="0.01" value="1">
-                </div>
-                <div>
-                    <label>Currency</label>
-                    <input type="text" id="currency" value="USD">
-                </div>
-                <div>
-                    <label>Window size</label>
-                    <input type="number" id="windowSize" value="100">
-                </div>
-                <div>
-                    <label>Cold threshold %</label>
-                    <input type="number" id="threshold" value="8.5" step="0.5">
-                </div>
-                <div>
-                    <label>Confirm ticks</label>
-                    <input type="number" id="confirmTicks" value="2">
-                </div>
-                <div>
-                    <label>Min gap %</label>
-                    <input type="number" id="minDiff" value="1.5" step="0.1">
-                </div>
-                <div class="full toggle-row">
-                    <span>🤖 AUTO-TRADE</span>
-                    <input type="checkbox" id="autoTradeToggle">
-                </div>
-                <div class="full toggle-row">
-                    <span>🔊 Sound</span>
-                    <input type="checkbox" id="soundToggle" checked>
-                </div>
-                <button class="apply-btn" id="applyBtn">Apply Settings</button>
+    <details class="settings" open>
+        <summary>API Token & Settings</summary>
+        <div class="settings-body">
+            <div class="full">
+                <label>API Token (Read + Trade)</label>
+                <input type="password" id="apiToken" placeholder="Paste your token here">
             </div>
-        </details>
-
-        <div class="chart-box">
-            <canvas id="priceChart"></canvas>
-            <div class="chart-range-label chart-range-max" id="chartMaxLabel"></div>
-            <div class="chart-range-label chart-range-min" id="chartMinLabel"></div>
-            <div class="chart-empty-msg" id="chartEmptyMsg">Waiting for ticks...</div>
-        </div>
-
-        <div class="price-card">
-            <div style="font-size:0.85em;color:#90a4ae;">REAL-TIME PRICE</div>
-            <div id="livePrice" class="price-value">0.00</div>
-            <div id="lastUpdate" style="font-size:0.8em;color:#78909c;">—</div>
-            <div id="lastDigitDisplay" style="font-size:1.15em;margin-top:6px;color:#ffeb3b;font-weight:bold;">Last digit: —</div>
-        </div>
-
-        <div id="signalContainer" class="signal-box signal-neutral">Waiting...</div>
-
-        <div class="info-row">
-            <div class="info-box" id="lowInfo">Low 0-4: —</div>
-            <div class="info-box best-digit" id="bestDigitBox">Best Digit: —</div>
-            <div class="info-box" id="highInfo">High 5-9: —</div>
-        </div>
-
-        <div class="digit-grid" id="digitGrid"></div>
-
-        <div class="trade-log" id="tradeLog">
-            <div style="color:#90a4ae;">Trade log will appear here...</div>
-        </div>
-
-        <div class="history-section">
-            <div class="history-header">
-                <h3>Signal history</h3>
-                <button id="clearHistoryBtn" style="background:none;border:1px solid #455a64;color:#90a4ae;border-radius:6px;padding:4px 10px;cursor:pointer;">Clear</button>
+            <div>
+                <label>App ID</label>
+                <input type="text" id="appId" value="1089">
             </div>
-            <table class="history-table">
-                <thead><tr><th>Time</th><th>Signal</th><th>Detail</th></tr></thead>
-                <tbody id="historyBody"></tbody>
-            </table>
-            <div class="empty-history" id="emptyHistoryMsg">No signals yet.</div>
+            <div>
+                <label>Stake</label>
+                <input type="number" id="stake" value="1" min="0.35" step="0.01">
+            </div>
+            <div>
+                <label>Symbol</label>
+                <select id="symbolSelect">
+                    <option value="R_75" selected>Volatility 75</option>
+                    <option value="R_100">Volatility 100</option>
+                    <option value="R_50">Volatility 50</option>
+                    <option value="R_25">Volatility 25</option>
+                    <option value="R_10">Volatility 10</option>
+                    <option value="1HZ75V">Vol 75 (1s)</option>
+                    <option value="1HZ100V">Vol 100 (1s)</option>
+                </select>
+            </div>
+            <div>
+                <label>Window size</label>
+                <input type="number" id="windowSize" value="100">
+            </div>
+            <div>
+                <label>Cold threshold %</label>
+                <input type="number" id="threshold" value="8.5" step="0.5">
+            </div>
+            <div>
+                <label>Confirm ticks</label>
+                <input type="number" id="confirmTicks" value="2">
+            </div>
+            <div>
+                <label>Min gap %</label>
+                <input type="number" id="minDiff" value="1.5" step="0.1">
+            </div>
+            <div class="full toggle-row">
+                <span>🤖 AUTO-TRADE</span>
+                <input type="checkbox" id="autoTradeToggle">
+            </div>
+            <div class="full toggle-row">
+                <span>🔊 Sound</span>
+                <input type="checkbox" id="soundToggle" checked>
+            </div>
+            <button class="apply-btn" id="applyBtn">Apply & Start</button>
         </div>
+    </details>
+
+    <div class="chart-box">
+        <canvas id="priceChart"></canvas>
+        <div class="chart-empty-msg" id="chartEmptyMsg">Waiting for ticks...</div>
     </div>
 
-    <div id="logConsole"></div>
+    <div class="price-card">
+        <div style="font-size:0.85em;color:#90a4ae;">REAL-TIME PRICE</div>
+        <div id="livePrice" class="price-value">0.00</div>
+        <div id="lastUpdate" style="font-size:0.8em;color:#78909c;">—</div>
+        <div id="lastDigitDisplay" style="font-size:1.15em;margin-top:6px;color:#ffeb3b;font-weight:bold;">Last digit: —</div>
+    </div>
+
+    <div id="signalContainer" class="signal-box signal-neutral">Waiting for connection...</div>
+
+    <div class="info-row">
+        <div class="info-box" id="lowInfo">Low 0-4: —</div>
+        <div class="info-box best-digit" id="bestDigitBox">Best Digit: —</div>
+        <div class="info-box" id="highInfo">High 5-9: —</div>
+    </div>
+
+    <div class="digit-grid" id="digitGrid"></div>
+
+    <div class="trade-log" id="tradeLog">
+        <div style="color:#90a4ae;">Trade log...</div>
+    </div>
+
+    <div class="history-section">
+        <div class="history-header">
+            <h3>Signal History</h3>
+            <button id="clearHistoryBtn" style="background:none;border:1px solid #455a64;color:#90a4ae;border-radius:6px;padding:4px 10px;cursor:pointer;">Clear</button>
+        </div>
+        <table>
+            <thead><tr><th>Time</th><th>Signal</th><th>Detail</th></tr></thead>
+            <tbody id="historyBody"></tbody>
+        </table>
+    </div>
+
     <div class="disclaimer">
         Experimental tool. Use Demo account. Not financial advice.
     </div>
 </div>
 
 <script>
-    // ================== CONFIG ==================
-    const APP_ID = '33W2GNh3J3oo5adNUCZIp';
-    const REDIRECT_URI = 'https://over-under-9hrr.vercel.app/';
-    // ============================================
-
-    const OAUTH_URL = `https://oauth.deriv.com/oauth2/authorize?app_id=${APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&l=en&brand=deriv`;
-
-    const STORAGE_KEY = 'derivOAuth_v3';
-    const HISTORY_KEY = 'derivOAuthHistory_v3';
+    const STORAGE_KEY = 'derivTokenAuto_v1';
+    const HISTORY_KEY = 'derivTokenHistory_v1';
     const CHART_MAX = 180;
     const PING_MS = 25000;
 
     let settings = {
+        apiToken: '',
+        appId: '1089',
         symbol: 'R_75',
         stake: 1,
-        currency: 'USD',
         windowSize: 100,
         threshold: 8.5,
         confirmTicks: 2,
@@ -447,8 +372,6 @@
         sound: true
     };
 
-    let token = null;
-    let accountInfo = null;
     let ws = null, pingTimer = null;
     let authorized = false;
     let digitBuffer = [], digitCounts = new Array(10).fill(0);
@@ -460,64 +383,9 @@
     let lastBuyTime = 0;
     let pendingBuy = null;
 
-    // ---------- OAuth ----------
-    function handleOAuthCallback() {
-        const params = new URLSearchParams(window.location.search);
-        const token1 = params.get('token1');
-        const acct1 = params.get('acct1');
-        const cur1 = params.get('cur1');
-
-        if (token1) {
-            token = token1;
-            accountInfo = { loginid: acct1 || 'Unknown', currency: cur1 || 'USD' };
-            localStorage.setItem('deriv_oauth_token', token);
-            localStorage.setItem('deriv_oauth_account', JSON.stringify(accountInfo));
-            // Clean URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-            return true;
-        }
-
-        // Check saved token
-        const savedToken = localStorage.getItem('deriv_oauth_token');
-        if (savedToken) {
-            token = savedToken;
-            try {
-                accountInfo = JSON.parse(localStorage.getItem('deriv_oauth_account'));
-            } catch(e) {}
-            return true;
-        }
-        return false;
-    }
-
-    function showLogin() {
-        document.getElementById('loginScreen').classList.remove('hidden');
-        document.getElementById('botScreen').classList.add('hidden');
-        document.getElementById('connectionStatus').innerText = 'Not logged in';
-        document.getElementById('connectionStatus').className = 'status-badge disconnected';
-    }
-
-    function showBot() {
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('botScreen').classList.remove('hidden');
-        if (accountInfo) {
-            document.getElementById('accountInfo').innerText = 
-                `Logged in: ${accountInfo.loginid} (${accountInfo.currency})`;
-        }
-    }
-
-    function logout() {
-        localStorage.removeItem('deriv_oauth_token');
-        localStorage.removeItem('deriv_oauth_account');
-        token = null;
-        accountInfo = null;
-        if (ws) try { ws.close(); } catch(e){}
-        showLogin();
-    }
-
-    // ---------- Helpers ----------
     function getLastDigit(q) {
         const c = String(q).replace('.', '');
-        const d = parseInt(c.charAt(c.length - 1), 10);
+        const d = parseInt(c.charAt(c.length-1), 10);
         return Number.isFinite(d) ? d : null;
     }
 
@@ -525,9 +393,7 @@
         if (digitBufCount === settings.windowSize) {
             const old = digitBuffer[digitBufHead];
             if (old >= 0) digitCounts[old]--;
-        } else {
-            digitBufCount++;
-        }
+        } else digitBufCount++;
         digitBuffer[digitBufHead] = d;
         digitCounts[d]++;
         digitBufHead = (digitBufHead + 1) % settings.windowSize;
@@ -539,14 +405,13 @@
         el.innerHTML = `<div>[${time}] ${msg}</div>` + el.innerHTML;
     }
 
-    // ---------- Chart ----------
     function resetChart() {
         chartPoints = [];
         document.getElementById('chartEmptyMsg').style.display = 'flex';
     }
 
     function pushChartPoint(t, p) {
-        chartPoints.push({ time: t, price: p });
+        chartPoints.push({time: t, price: p});
         if (chartPoints.length > CHART_MAX) chartPoints.shift();
         drawChart();
     }
@@ -555,91 +420,71 @@
         const canvas = document.getElementById('priceChart');
         if (!canvas || chartPoints.length < 2) return;
         document.getElementById('chartEmptyMsg').style.display = 'none';
-
         const dpr = window.devicePixelRatio || 1;
         const rect = canvas.parentElement.getBoundingClientRect();
         canvas.width = rect.width * dpr;
         canvas.height = rect.height * dpr;
         const ctx = canvas.getContext('2d');
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.setTransform(dpr,0,0,dpr,0,0);
         const W = rect.width, H = rect.height;
-        ctx.clearRect(0, 0, W, H);
-
+        ctx.clearRect(0,0,W,H);
         const prices = chartPoints.map(p => p.price);
         let min = Math.min(...prices), max = Math.max(...prices);
-        if (min === max) { min -= 1; max += 1; }
-        const pad = (max - min) * 0.1;
-        min -= pad; max += pad;
-
-        const stepX = W / (chartPoints.length - 1);
-        const sy = v => H - ((v - min) / (max - min)) * H;
-
+        if (min === max) { min--; max++; }
+        const pad = (max-min)*0.1; min -= pad; max += pad;
+        const stepX = W / (chartPoints.length-1);
+        const sy = v => H - ((v-min)/(max-min))*H;
         ctx.beginPath();
         ctx.moveTo(0, sy(prices[0]));
-        prices.forEach((p, i) => ctx.lineTo(i * stepX, sy(p)));
-        ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
-        const g = ctx.createLinearGradient(0, 0, 0, H);
-        g.addColorStop(0, 'rgba(0,188,212,0.2)');
-        g.addColorStop(1, 'rgba(0,188,212,0)');
-        ctx.fillStyle = g;
-        ctx.fill();
-
+        prices.forEach((p,i) => ctx.lineTo(i*stepX, sy(p)));
+        ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+        const g = ctx.createLinearGradient(0,0,0,H);
+        g.addColorStop(0,'rgba(0,188,212,0.2)');
+        g.addColorStop(1,'rgba(0,188,212,0)');
+        ctx.fillStyle = g; ctx.fill();
         ctx.beginPath();
-        prices.forEach((p, i) => {
-            const x = i * stepX, y = sy(p);
-            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        prices.forEach((p,i) => {
+            const x = i*stepX, y = sy(p);
+            i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
         });
         ctx.strokeStyle = '#00bcd4';
         ctx.lineWidth = 1.6;
         ctx.stroke();
-
-        document.getElementById('chartMaxLabel').innerText = max.toFixed(2);
-        document.getElementById('chartMinLabel').innerText = min.toFixed(2);
     }
 
-    // ---------- Signal Logic ----------
-    function evaluateOverUnder(raw, price) {
+    function evaluateOverUnder(raw) {
         const d = getLastDigit(raw);
         if (d === null) return;
-
         pushDigit(d);
         document.getElementById('lastDigitDisplay').innerText = 'Last digit: ' + d;
 
         const box = document.getElementById('signalContainer');
         if (digitBufCount < 30) {
             box.className = 'signal-box signal-neutral';
-            box.innerText = `Collecting digits (${digitBufCount})...`;
+            box.innerText = `Collecting (${digitBufCount})...`;
             renderDigitGrid(null, -1);
             return;
         }
 
         const pct = digitCounts.map(c => (c / digitBufCount) * 100);
         let bestDigit = 0, bestPct = pct[0];
-        for (let i = 1; i < 10; i++) {
-            if (pct[i] < bestPct) {
-                bestPct = pct[i];
-                bestDigit = i;
-            }
-        }
+        for (let i=1; i<10; i++) if (pct[i] < bestPct) { bestPct = pct[i]; bestDigit = i; }
 
-        document.getElementById('bestDigitBox').innerHTML = 
-            `Best Digit: <b>${bestDigit}</b> (${bestPct.toFixed(1)}%)`;
+        document.getElementById('bestDigitBox').innerHTML = `Best Digit: <b>${bestDigit}</b> (${bestPct.toFixed(1)}%)`;
         renderDigitGrid(pct, bestDigit);
 
-        const lowPct = pct[0] + pct[1] + pct[2] + pct[3] + pct[4];
-        const highPct = pct[5] + pct[6] + pct[7] + pct[8] + pct[9];
+        const lowPct = pct.slice(0,5).reduce((a,b)=>a+b,0);
+        const highPct = pct.slice(5).reduce((a,b)=>a+b,0);
         document.getElementById('lowInfo').innerText = `Low 0-4: ${lowPct.toFixed(1)}%`;
         document.getElementById('highInfo').innerText = `High 5-9: ${highPct.toFixed(1)}%`;
 
-        let rawSignal = null;
-        let detail = '';
-        let barrier = bestDigit;
+        let rawSignal = null, detail = '', barrier = bestDigit;
         const isCold = bestPct <= settings.threshold && (10 - bestPct) >= settings.minDiff;
 
-        if (lowPct <= (50 - settings.minDiff * 2) && lowPct < highPct) {
+        if (lowPct <= (50 - settings.minDiff*2) && lowPct < highPct) {
             rawSignal = 'over';
             detail = `Low cold → OVER | Best ${bestDigit}`;
-        } else if (highPct <= (50 - settings.minDiff * 2) && highPct < lowPct) {
+        } else if (highPct <= (50 - settings.minDiff*2) && highPct < lowPct) {
             rawSignal = 'under';
             detail = `High cold → UNDER | Best ${bestDigit}`;
         } else if (isCold) {
@@ -651,8 +496,7 @@
             if (pendingSignal === rawSignal) pendingCount++;
             else { pendingSignal = rawSignal; pendingCount = 1; }
         } else {
-            pendingSignal = null;
-            pendingCount = 0;
+            pendingSignal = null; pendingCount = 0;
         }
 
         let final = (pendingCount >= settings.confirmTicks) ? pendingSignal : null;
@@ -673,9 +517,7 @@
             }
         } else {
             box.className = 'signal-box signal-neutral';
-            box.innerText = pendingSignal 
-                ? `Building ${pendingSignal.toUpperCase()} (${pendingCount}/${settings.confirmTicks})` 
-                : 'No clear edge';
+            box.innerText = pendingSignal ? `Building ${pendingSignal.toUpperCase()} (${pendingCount}/${settings.confirmTicks})` : 'No clear edge';
         }
         currentSignal = final;
     }
@@ -683,7 +525,7 @@
     function renderDigitGrid(pct, best) {
         const grid = document.getElementById('digitGrid');
         grid.innerHTML = '';
-        for (let i = 0; i < 10; i++) {
+        for (let i=0; i<10; i++) {
             const cell = document.createElement('div');
             let cls = 'digit-cell';
             if (pct) {
@@ -692,15 +534,14 @@
                 else if (pct[i] >= 12) cls += ' hot';
             }
             cell.className = cls;
-            cell.innerHTML = `<div class="digit-label">${i}</div><div class="digit-value">${pct ? pct[i].toFixed(1) + '%' : '--'}</div>`;
+            cell.innerHTML = `<div class="digit-label">${i}</div><div class="digit-value">${pct ? pct[i].toFixed(1)+'%' : '--'}</div>`;
             grid.appendChild(cell);
         }
     }
 
-    // ---------- Auto Buy ----------
     function executeBuy(type, barrier) {
         if (!authorized) {
-            pendingBuy = { type, barrier };
+            pendingBuy = {type, barrier};
             logTrade('Waiting for authorization...');
             return;
         }
@@ -717,40 +558,37 @@
                 amount: settings.stake,
                 basis: 'stake',
                 contract_type: type,
-                currency: settings.currency || (accountInfo && accountInfo.currency) || 'USD',
+                currency: 'USD',
                 duration: 1,
                 duration_unit: 't',
                 symbol: settings.symbol,
                 barrier: String(barrier)
             }
         };
-        logTrade(`🚀 BUY ${type} digit ${barrier} | Stake: ${settings.stake}`);
+        logTrade(`🚀 BUY ${type} digit ${barrier} | Stake ${settings.stake}`);
         ws.send(JSON.stringify(req));
     }
 
-    // ---------- WebSocket ----------
     function initWebSocket() {
         if (ws) try { ws.close(); } catch(e){}
         authorized = false;
         pendingBuy = null;
         digitBuffer = new Array(settings.windowSize).fill(-1);
         digitCounts = new Array(10).fill(0);
-        digitBufCount = 0;
-        digitBufHead = 0;
-        currentSignal = null;
-        pendingSignal = null;
-        pendingCount = 0;
+        digitBufCount = 0; digitBufHead = 0;
+        currentSignal = null; pendingSignal = null; pendingCount = 0;
         resetChart();
 
-        ws = new WebSocket(`wss://ws.derivws.com/websockets/v3?app_id=${APP_ID}`);
+        const url = `wss://ws.derivws.com/websockets/v3?app_id=${settings.appId}`;
+        ws = new WebSocket(url);
 
         ws.onopen = () => {
             document.getElementById('connectionStatus').innerText = 'Connected';
             document.getElementById('connectionStatus').className = 'status-badge connected';
 
-            if (token) {
-                ws.send(JSON.stringify({ authorize: token }));
-                logTrade('Authorizing with token...');
+            if (settings.apiToken) {
+                ws.send(JSON.stringify({ authorize: settings.apiToken }));
+                logTrade('Authorizing...');
             }
 
             ws.send(JSON.stringify({
@@ -763,20 +601,16 @@
             }));
 
             pingTimer = setInterval(() => {
-                if (ws && ws.readyState === 1) {
-                    ws.send(JSON.stringify({ ping: 1 }));
-                }
+                if (ws && ws.readyState === 1) ws.send(JSON.stringify({ ping: 1 }));
             }, PING_MS);
         };
 
         ws.onmessage = (ev) => {
             let data;
-            try { data = JSON.parse(ev.data); } catch(e) { return; }
+            try { data = JSON.parse(ev.data); } catch(e){ return; }
 
             if (data.error) {
-                const msg = data.error.message || 'Unknown error';
-                logTrade('❌ ' + msg);
-                document.getElementById('logConsole').innerText = msg;
+                logTrade('❌ ' + (data.error.message || 'Error'));
                 return;
             }
 
@@ -785,45 +619,33 @@
                 document.getElementById('connectionStatus').innerText = 'Authorized • Ready';
                 document.getElementById('connectionStatus').className = 'status-badge trading';
                 logTrade('✅ Authorized successfully');
-
-                if (data.authorize) {
-                    accountInfo = {
-                        loginid: data.authorize.loginid,
-                        currency: data.authorize.currency
-                    };
-                    document.getElementById('accountInfo').innerText = 
-                        `Logged in: ${accountInfo.loginid} (${accountInfo.currency})`;
-                }
-
                 if (pendingBuy) {
-                    const p = pendingBuy;
-                    pendingBuy = null;
+                    const p = pendingBuy; pendingBuy = null;
                     executeBuy(p.type, p.barrier);
                 }
                 return;
             }
 
             if (data.msg_type === 'buy' && data.buy) {
-                logTrade(`✅ Bought! Contract ID: ${data.buy.contract_id}`);
+                logTrade(`✅ Bought! ID: ${data.buy.contract_id}`);
                 return;
             }
 
             if (data.msg_type === 'history' && data.history) {
                 const prices = data.history.prices || [];
                 const times = data.history.times || [];
-                for (let i = 0; i < prices.length; i++) {
+                for (let i=0; i<prices.length; i++) {
                     const p = parseFloat(prices[i]);
                     if (!Number.isFinite(p)) continue;
-                    pushChartPoint(Number(times[i]) * 1000, p);
+                    pushChartPoint(Number(times[i])*1000, p);
                     const d = getLastDigit(String(prices[i]));
                     if (d !== null) pushDigit(d);
                 }
                 if (prices.length) {
-                    const lp = parseFloat(prices[prices.length - 1]);
+                    const lp = parseFloat(prices[prices.length-1]);
                     document.getElementById('livePrice').innerText = lp.toFixed(2);
-                    document.getElementById('lastUpdate').innerText = 
-                        'Last: ' + new Date(Number(times[times.length - 1]) * 1000).toLocaleTimeString();
-                    evaluateOverUnder(String(prices[prices.length - 1]), lp);
+                    document.getElementById('lastUpdate').innerText = 'Last: ' + new Date(Number(times[times.length-1])*1000).toLocaleTimeString();
+                    evaluateOverUnder(String(prices[prices.length-1]));
                 }
                 return;
             }
@@ -834,10 +656,9 @@
                 if (!Number.isFinite(p)) return;
                 const t = (data.tick.epoch || 0) * 1000;
                 document.getElementById('livePrice').innerText = p.toFixed(2);
-                document.getElementById('lastUpdate').innerText = 
-                    'Last: ' + new Date(t).toLocaleTimeString();
+                document.getElementById('lastUpdate').innerText = 'Last: ' + new Date(t).toLocaleTimeString();
                 pushChartPoint(t, p);
-                evaluateOverUnder(raw, p);
+                evaluateOverUnder(raw);
             }
         };
 
@@ -849,69 +670,47 @@
         };
     }
 
-    // ---------- History & Sound ----------
     function recordSignal(dir, detail) {
-        tradeHistory.unshift({
-            time: new Date().toLocaleTimeString(),
-            direction: dir,
-            detail: detail
-        });
-        if (tradeHistory.length > 30) tradeHistory.pop();
+        tradeHistory.unshift({ time: new Date().toLocaleTimeString(), direction: dir, detail });
+        if (tradeHistory.length > 25) tradeHistory.pop();
         localStorage.setItem(HISTORY_KEY, JSON.stringify(tradeHistory));
         renderHistory();
-
         if (settings.sound) {
             try {
                 if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const o = audioCtx.createOscillator();
                 const g = audioCtx.createGain();
-                o.connect(g);
-                g.connect(audioCtx.destination);
+                o.connect(g); g.connect(audioCtx.destination);
                 o.frequency.value = dir === 'over' ? 880 : 440;
                 g.gain.setValueAtTime(0.1, audioCtx.currentTime);
                 g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-                o.start();
-                o.stop(audioCtx.currentTime + 0.3);
-            } catch(e) {}
+                o.start(); o.stop(audioCtx.currentTime + 0.3);
+            } catch(e){}
         }
     }
 
     function renderHistory() {
         const body = document.getElementById('historyBody');
-        const empty = document.getElementById('emptyHistoryMsg');
         body.innerHTML = '';
-        if (!tradeHistory.length) {
-            empty.style.display = 'block';
-            return;
-        }
-        empty.style.display = 'none';
         tradeHistory.forEach(item => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${item.time}</td>
-                <td class="dir-${item.direction}">${item.direction.toUpperCase()}</td>
-                <td>${item.detail}</td>`;
+            tr.innerHTML = `<td>${item.time}</td><td class="dir-${item.direction}">${item.direction.toUpperCase()}</td><td>${item.detail}</td>`;
             body.appendChild(tr);
         });
     }
 
-    // ---------- Events ----------
-    document.getElementById('loginBtn').onclick = () => {
-        window.location.href = OAUTH_URL;
-    };
-
-    document.getElementById('logoutBtn').onclick = logout;
-
     document.getElementById('applyBtn').onclick = () => {
+        settings.apiToken = document.getElementById('apiToken').value.trim();
+        settings.appId = document.getElementById('appId').value || '1089';
         settings.symbol = document.getElementById('symbolSelect').value;
         settings.stake = parseFloat(document.getElementById('stake').value) || 1;
-        settings.currency = document.getElementById('currency').value || 'USD';
         settings.windowSize = parseInt(document.getElementById('windowSize').value) || 100;
         settings.threshold = parseFloat(document.getElementById('threshold').value) || 8.5;
         settings.confirmTicks = parseInt(document.getElementById('confirmTicks').value) || 2;
         settings.minDiff = parseFloat(document.getElementById('minDiff').value) || 1.5;
         settings.autoTrade = document.getElementById('autoTradeToggle').checked;
         settings.sound = document.getElementById('soundToggle').checked;
+
         localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
         initWebSocket();
     };
@@ -922,20 +721,20 @@
         renderHistory();
     };
 
-    // ---------- Start ----------
     window.onload = () => {
         try {
             const s = JSON.parse(localStorage.getItem(STORAGE_KEY));
             if (s) settings = Object.assign(settings, s);
-        } catch(e) {}
+        } catch(e){}
         try {
             const h = JSON.parse(localStorage.getItem(HISTORY_KEY));
             if (Array.isArray(h)) tradeHistory = h;
-        } catch(e) {}
+        } catch(e){}
 
+        document.getElementById('apiToken').value = settings.apiToken || '';
+        document.getElementById('appId').value = settings.appId;
         document.getElementById('symbolSelect').value = settings.symbol;
         document.getElementById('stake').value = settings.stake;
-        document.getElementById('currency').value = settings.currency;
         document.getElementById('windowSize').value = settings.windowSize;
         document.getElementById('threshold').value = settings.threshold;
         document.getElementById('confirmTicks').value = settings.confirmTicks;
@@ -944,13 +743,7 @@
         document.getElementById('soundToggle').checked = settings.sound;
 
         renderHistory();
-
-        if (handleOAuthCallback()) {
-            showBot();
-            initWebSocket();
-        } else {
-            showLogin();
-        }
+        if (settings.apiToken) initWebSocket();
     };
 </script>
 </body>
