@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deriv Over/Under Auto-Trade (OAuth)</title>
+<title>Deriv Over/Under Auto-Trade</title>
 <style>
     * { box-sizing: border-box; }
     body {
@@ -50,7 +50,7 @@
 
     .login-box {
         text-align: center;
-        padding: 40px 20px;
+        padding: 50px 20px;
         background: #232d3b;
         border-radius: 12px;
         margin-bottom: 20px;
@@ -59,20 +59,15 @@
         background: #ff444f;
         color: white;
         border: none;
-        padding: 14px 32px;
-        font-size: 1.1em;
+        padding: 16px 40px;
+        font-size: 1.15em;
         font-weight: bold;
         border-radius: 8px;
         cursor: pointer;
+        transition: 0.2s;
     }
-    .login-btn:hover { background: #e03942; }
+    .login-btn:hover { background: #e03942; transform: scale(1.03); }
 
-    .controls-row {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 16px;
-        flex-wrap: wrap;
-    }
     label {
         font-size: 0.8em;
         color: #90a4ae;
@@ -254,7 +249,7 @@
         background: #1a2332;
         border-radius: 8px;
         padding: 10px;
-        max-height: 140px;
+        max-height: 150px;
         overflow-y: auto;
         font-size: 0.78em;
         margin-top: 10px;
@@ -304,14 +299,14 @@
 
 <div class="container">
     <div class="header">
-        <h2 id="dashTitle">Over/Under Auto-Trade</h2>
+        <h2>Over/Under Auto-Trade</h2>
         <span id="connectionStatus" class="status-badge disconnected">Not logged in</span>
     </div>
 
     <!-- LOGIN SCREEN -->
     <div id="loginScreen" class="login-box">
-        <h3 style="margin-top:0;">Login with your Deriv account</h3>
-        <p style="color:#90a4ae; margin-bottom:24px;">You will be redirected to Deriv’s official login page</p>
+        <h3 style="margin-top:0; margin-bottom:10px;">Login with Deriv</h3>
+        <p style="color:#90a4ae; margin-bottom:30px;">You will be redirected to Deriv’s official login page</p>
         <button class="login-btn" id="loginBtn">Login with Deriv</button>
     </div>
 
@@ -320,27 +315,25 @@
 
         <div class="warning-box">
             ⚠️ <strong>Use DEMO account first!</strong><br>
-            Auto-Trade will place real 1-tick contracts when a signal is confirmed.
+            Auto-Trade buys real 1-tick contracts when a signal is confirmed.
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
             <div id="accountInfo" style="font-size:0.9em; color:#81c784;"></div>
             <button class="logout-btn" id="logoutBtn">Logout</button>
         </div>
 
-        <div class="controls-row">
-            <div style="flex:2;">
-                <label>Symbol</label>
-                <select id="symbolSelect">
-                    <option value="R_10">Volatility 10</option>
-                    <option value="R_25">Volatility 25</option>
-                    <option value="R_50">Volatility 50</option>
-                    <option value="R_75" selected>Volatility 75</option>
-                    <option value="R_100">Volatility 100</option>
-                    <option value="1HZ75V">Volatility 75 (1s)</option>
-                    <option value="1HZ100V">Volatility 100 (1s)</option>
-                </select>
-            </div>
+        <div style="margin-bottom:14px;">
+            <label>Symbol</label>
+            <select id="symbolSelect">
+                <option value="R_10">Volatility 10</option>
+                <option value="R_25">Volatility 25</option>
+                <option value="R_50">Volatility 50</option>
+                <option value="R_75" selected>Volatility 75</option>
+                <option value="R_100">Volatility 100</option>
+                <option value="1HZ75V">Volatility 75 (1s)</option>
+                <option value="1HZ100V">Volatility 100 (1s)</option>
+            </select>
         </div>
 
         <details class="settings">
@@ -390,13 +383,13 @@
         </div>
 
         <div class="price-card">
-            <div id="priceLabel" style="font-size:0.85em;color:#90a4ae;">REAL-TIME PRICE</div>
+            <div style="font-size:0.85em;color:#90a4ae;">REAL-TIME PRICE</div>
             <div id="livePrice" class="price-value">0.00</div>
             <div id="lastUpdate" style="font-size:0.8em;color:#78909c;">—</div>
             <div id="lastDigitDisplay" style="font-size:1.15em;margin-top:6px;color:#ffeb3b;font-weight:bold;">Last digit: —</div>
         </div>
 
-        <div id="signalContainer" class="signal-box signal-neutral">Waiting for login...</div>
+        <div id="signalContainer" class="signal-box signal-neutral">Waiting...</div>
 
         <div class="info-row">
             <div class="info-box" id="lowInfo">Low 0-4: —</div>
@@ -407,7 +400,7 @@
         <div class="digit-grid" id="digitGrid"></div>
 
         <div class="trade-log" id="tradeLog">
-            <div style="color:#90a4ae;">Trade log...</div>
+            <div style="color:#90a4ae;">Trade log will appear here...</div>
         </div>
 
         <div class="history-section">
@@ -430,15 +423,15 @@
 </div>
 
 <script>
-    // ================== YOUR SETTINGS ==================
+    // ================== CONFIG ==================
     const APP_ID = '33W2GNh3J3oo5adNUCZIp';
     const REDIRECT_URI = 'https://over-under-9hrr.vercel.app/';
-    // ==================================================
+    // ============================================
 
-    const OAUTH_URL = `https://oauth.deriv.com/oauth2/authorize?app_id=${APP_ID}&l=en&brand=deriv`;
+    const OAUTH_URL = `https://oauth.deriv.com/oauth2/authorize?app_id=${APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&l=en&brand=deriv`;
 
-    const STORAGE_KEY = 'derivOAuthAuto_v2';
-    const HISTORY_KEY = 'derivOAuthHistory_v2';
+    const STORAGE_KEY = 'derivOAuth_v3';
+    const HISTORY_KEY = 'derivOAuthHistory_v3';
     const CHART_MAX = 180;
     const PING_MS = 25000;
 
@@ -476,18 +469,21 @@
 
         if (token1) {
             token = token1;
-            accountInfo = { loginid: acct1, currency: cur1 || 'USD' };
+            accountInfo = { loginid: acct1 || 'Unknown', currency: cur1 || 'USD' };
             localStorage.setItem('deriv_oauth_token', token);
             localStorage.setItem('deriv_oauth_account', JSON.stringify(accountInfo));
+            // Clean URL
             window.history.replaceState({}, document.title, window.location.pathname);
             return true;
         }
 
+        // Check saved token
         const savedToken = localStorage.getItem('deriv_oauth_token');
-        const savedAcc = localStorage.getItem('deriv_oauth_account');
         if (savedToken) {
             token = savedToken;
-            try { accountInfo = JSON.parse(savedAcc); } catch(e){}
+            try {
+                accountInfo = JSON.parse(localStorage.getItem('deriv_oauth_account'));
+            } catch(e) {}
             return true;
         }
         return false;
@@ -505,7 +501,7 @@
         document.getElementById('botScreen').classList.remove('hidden');
         if (accountInfo) {
             document.getElementById('accountInfo').innerText = 
-                `Logged in: ${accountInfo.loginid} (${accountInfo.currency || 'USD'})`;
+                `Logged in: ${accountInfo.loginid} (${accountInfo.currency})`;
         }
     }
 
@@ -521,7 +517,7 @@
     // ---------- Helpers ----------
     function getLastDigit(q) {
         const c = String(q).replace('.', '');
-        const d = parseInt(c.charAt(c.length-1), 10);
+        const d = parseInt(c.charAt(c.length - 1), 10);
         return Number.isFinite(d) ? d : null;
     }
 
@@ -529,7 +525,9 @@
         if (digitBufCount === settings.windowSize) {
             const old = digitBuffer[digitBufHead];
             if (old >= 0) digitCounts[old]--;
-        } else digitBufCount++;
+        } else {
+            digitBufCount++;
+        }
         digitBuffer[digitBufHead] = d;
         digitCounts[d]++;
         digitBufHead = (digitBufHead + 1) % settings.windowSize;
@@ -546,81 +544,102 @@
         chartPoints = [];
         document.getElementById('chartEmptyMsg').style.display = 'flex';
     }
+
     function pushChartPoint(t, p) {
-        chartPoints.push({time:t, price:p});
+        chartPoints.push({ time: t, price: p });
         if (chartPoints.length > CHART_MAX) chartPoints.shift();
         drawChart();
     }
+
     function drawChart() {
         const canvas = document.getElementById('priceChart');
         if (!canvas || chartPoints.length < 2) return;
         document.getElementById('chartEmptyMsg').style.display = 'none';
+
         const dpr = window.devicePixelRatio || 1;
         const rect = canvas.parentElement.getBoundingClientRect();
         canvas.width = rect.width * dpr;
         canvas.height = rect.height * dpr;
         const ctx = canvas.getContext('2d');
-        ctx.setTransform(dpr,0,0,dpr,0,0);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         const W = rect.width, H = rect.height;
-        ctx.clearRect(0,0,W,H);
+        ctx.clearRect(0, 0, W, H);
+
         const prices = chartPoints.map(p => p.price);
         let min = Math.min(...prices), max = Math.max(...prices);
-        if (min === max) { min--; max++; }
-        const pad = (max-min)*0.1; min-=pad; max+=pad;
-        const stepX = W/(chartPoints.length-1);
-        const sy = v => H - ((v-min)/(max-min))*H;
+        if (min === max) { min -= 1; max += 1; }
+        const pad = (max - min) * 0.1;
+        min -= pad; max += pad;
+
+        const stepX = W / (chartPoints.length - 1);
+        const sy = v => H - ((v - min) / (max - min)) * H;
+
         ctx.beginPath();
         ctx.moveTo(0, sy(prices[0]));
-        prices.forEach((p,i) => ctx.lineTo(i*stepX, sy(p)));
-        ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
-        const g = ctx.createLinearGradient(0,0,0,H);
-        g.addColorStop(0,'rgba(0,188,212,0.2)');
-        g.addColorStop(1,'rgba(0,188,212,0)');
-        ctx.fillStyle = g; ctx.fill();
+        prices.forEach((p, i) => ctx.lineTo(i * stepX, sy(p)));
+        ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, 'rgba(0,188,212,0.2)');
+        g.addColorStop(1, 'rgba(0,188,212,0)');
+        ctx.fillStyle = g;
+        ctx.fill();
+
         ctx.beginPath();
-        prices.forEach((p,i) => {
-            const x=i*stepX, y=sy(p);
-            i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+        prices.forEach((p, i) => {
+            const x = i * stepX, y = sy(p);
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         });
-        ctx.strokeStyle='#00bcd4'; ctx.lineWidth=1.6; ctx.stroke();
+        ctx.strokeStyle = '#00bcd4';
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+
         document.getElementById('chartMaxLabel').innerText = max.toFixed(2);
         document.getElementById('chartMinLabel').innerText = min.toFixed(2);
     }
 
-    // ---------- Signal ----------
+    // ---------- Signal Logic ----------
     function evaluateOverUnder(raw, price) {
         const d = getLastDigit(raw);
         if (d === null) return;
+
         pushDigit(d);
         document.getElementById('lastDigitDisplay').innerText = 'Last digit: ' + d;
 
         const box = document.getElementById('signalContainer');
         if (digitBufCount < 30) {
             box.className = 'signal-box signal-neutral';
-            box.innerText = `Collecting (${digitBufCount})...`;
+            box.innerText = `Collecting digits (${digitBufCount})...`;
             renderDigitGrid(null, -1);
             return;
         }
 
         const pct = digitCounts.map(c => (c / digitBufCount) * 100);
         let bestDigit = 0, bestPct = pct[0];
-        for (let i=1; i<10; i++) if (pct[i] < bestPct) { bestPct = pct[i]; bestDigit = i; }
+        for (let i = 1; i < 10; i++) {
+            if (pct[i] < bestPct) {
+                bestPct = pct[i];
+                bestDigit = i;
+            }
+        }
 
-        document.getElementById('bestDigitBox').innerHTML = `Best Digit: <b>${bestDigit}</b> (${bestPct.toFixed(1)}%)`;
+        document.getElementById('bestDigitBox').innerHTML = 
+            `Best Digit: <b>${bestDigit}</b> (${bestPct.toFixed(1)}%)`;
         renderDigitGrid(pct, bestDigit);
 
-        const lowPct = pct[0]+pct[1]+pct[2]+pct[3]+pct[4];
-        const highPct = pct[5]+pct[6]+pct[7]+pct[8]+pct[9];
+        const lowPct = pct[0] + pct[1] + pct[2] + pct[3] + pct[4];
+        const highPct = pct[5] + pct[6] + pct[7] + pct[8] + pct[9];
         document.getElementById('lowInfo').innerText = `Low 0-4: ${lowPct.toFixed(1)}%`;
         document.getElementById('highInfo').innerText = `High 5-9: ${highPct.toFixed(1)}%`;
 
-        let rawSignal = null, detail = '', barrier = bestDigit;
+        let rawSignal = null;
+        let detail = '';
+        let barrier = bestDigit;
         const isCold = bestPct <= settings.threshold && (10 - bestPct) >= settings.minDiff;
 
-        if (lowPct <= (50 - settings.minDiff*2) && lowPct < highPct) {
+        if (lowPct <= (50 - settings.minDiff * 2) && lowPct < highPct) {
             rawSignal = 'over';
             detail = `Low cold → OVER | Best ${bestDigit}`;
-        } else if (highPct <= (50 - settings.minDiff*2) && highPct < lowPct) {
+        } else if (highPct <= (50 - settings.minDiff * 2) && highPct < lowPct) {
             rawSignal = 'under';
             detail = `High cold → UNDER | Best ${bestDigit}`;
         } else if (isCold) {
@@ -632,7 +651,8 @@
             if (pendingSignal === rawSignal) pendingCount++;
             else { pendingSignal = rawSignal; pendingCount = 1; }
         } else {
-            pendingSignal = null; pendingCount = 0;
+            pendingSignal = null;
+            pendingCount = 0;
         }
 
         let final = (pendingCount >= settings.confirmTicks) ? pendingSignal : null;
@@ -653,7 +673,9 @@
             }
         } else {
             box.className = 'signal-box signal-neutral';
-            box.innerText = pendingSignal ? `Building ${pendingSignal.toUpperCase()} (${pendingCount}/${settings.confirmTicks})` : 'No clear edge';
+            box.innerText = pendingSignal 
+                ? `Building ${pendingSignal.toUpperCase()} (${pendingCount}/${settings.confirmTicks})` 
+                : 'No clear edge';
         }
         currentSignal = final;
     }
@@ -661,7 +683,7 @@
     function renderDigitGrid(pct, best) {
         const grid = document.getElementById('digitGrid');
         grid.innerHTML = '';
-        for (let i=0; i<10; i++) {
+        for (let i = 0; i < 10; i++) {
             const cell = document.createElement('div');
             let cls = 'digit-cell';
             if (pct) {
@@ -670,15 +692,15 @@
                 else if (pct[i] >= 12) cls += ' hot';
             }
             cell.className = cls;
-            cell.innerHTML = `<div class="digit-label">${i}</div><div class="digit-value">${pct ? pct[i].toFixed(1)+'%' : '--'}</div>`;
+            cell.innerHTML = `<div class="digit-label">${i}</div><div class="digit-value">${pct ? pct[i].toFixed(1) + '%' : '--'}</div>`;
             grid.appendChild(cell);
         }
     }
 
-    // ---------- Buy ----------
+    // ---------- Auto Buy ----------
     function executeBuy(type, barrier) {
         if (!authorized) {
-            pendingBuy = {type, barrier};
+            pendingBuy = { type, barrier };
             logTrade('Waiting for authorization...');
             return;
         }
@@ -695,14 +717,14 @@
                 amount: settings.stake,
                 basis: 'stake',
                 contract_type: type,
-                currency: settings.currency || accountInfo?.currency || 'USD',
+                currency: settings.currency || (accountInfo && accountInfo.currency) || 'USD',
                 duration: 1,
                 duration_unit: 't',
                 symbol: settings.symbol,
                 barrier: String(barrier)
             }
         };
-        logTrade(`🚀 BUY ${type} digit ${barrier} | stake ${settings.stake}`);
+        logTrade(`🚀 BUY ${type} digit ${barrier} | Stake: ${settings.stake}`);
         ws.send(JSON.stringify(req));
     }
 
@@ -713,8 +735,11 @@
         pendingBuy = null;
         digitBuffer = new Array(settings.windowSize).fill(-1);
         digitCounts = new Array(10).fill(0);
-        digitBufCount = 0; digitBufHead = 0;
-        currentSignal = null; pendingSignal = null; pendingCount = 0;
+        digitBufCount = 0;
+        digitBufHead = 0;
+        currentSignal = null;
+        pendingSignal = null;
+        pendingCount = 0;
         resetChart();
 
         ws = new WebSocket(`wss://ws.derivws.com/websockets/v3?app_id=${APP_ID}`);
@@ -725,7 +750,7 @@
 
             if (token) {
                 ws.send(JSON.stringify({ authorize: token }));
-                logTrade('Authorizing...');
+                logTrade('Authorizing with token...');
             }
 
             ws.send(JSON.stringify({
@@ -738,17 +763,20 @@
             }));
 
             pingTimer = setInterval(() => {
-                if (ws?.readyState === 1) ws.send(JSON.stringify({ ping: 1 }));
+                if (ws && ws.readyState === 1) {
+                    ws.send(JSON.stringify({ ping: 1 }));
+                }
             }, PING_MS);
         };
 
         ws.onmessage = (ev) => {
             let data;
-            try { data = JSON.parse(ev.data); } catch(e){ return; }
+            try { data = JSON.parse(ev.data); } catch(e) { return; }
 
             if (data.error) {
-                logTrade('Error: ' + (data.error.message || ''));
-                document.getElementById('logConsole').innerText = data.error.message || '';
+                const msg = data.error.message || 'Unknown error';
+                logTrade('❌ ' + msg);
+                document.getElementById('logConsole').innerText = msg;
                 return;
             }
 
@@ -757,6 +785,7 @@
                 document.getElementById('connectionStatus').innerText = 'Authorized • Ready';
                 document.getElementById('connectionStatus').className = 'status-badge trading';
                 logTrade('✅ Authorized successfully');
+
                 if (data.authorize) {
                     accountInfo = {
                         loginid: data.authorize.loginid,
@@ -765,33 +794,36 @@
                     document.getElementById('accountInfo').innerText = 
                         `Logged in: ${accountInfo.loginid} (${accountInfo.currency})`;
                 }
+
                 if (pendingBuy) {
-                    const p = pendingBuy; pendingBuy = null;
+                    const p = pendingBuy;
+                    pendingBuy = null;
                     executeBuy(p.type, p.barrier);
                 }
                 return;
             }
 
             if (data.msg_type === 'buy' && data.buy) {
-                logTrade(`✅ Contract bought! ID: ${data.buy.contract_id}`);
+                logTrade(`✅ Bought! Contract ID: ${data.buy.contract_id}`);
                 return;
             }
 
             if (data.msg_type === 'history' && data.history) {
                 const prices = data.history.prices || [];
                 const times = data.history.times || [];
-                for (let i=0; i<prices.length; i++) {
+                for (let i = 0; i < prices.length; i++) {
                     const p = parseFloat(prices[i]);
                     if (!Number.isFinite(p)) continue;
-                    pushChartPoint(Number(times[i])*1000, p);
+                    pushChartPoint(Number(times[i]) * 1000, p);
                     const d = getLastDigit(String(prices[i]));
                     if (d !== null) pushDigit(d);
                 }
                 if (prices.length) {
-                    const lp = parseFloat(prices[prices.length-1]);
+                    const lp = parseFloat(prices[prices.length - 1]);
                     document.getElementById('livePrice').innerText = lp.toFixed(2);
-                    document.getElementById('lastUpdate').innerText = 'Last: ' + new Date(Number(times[times.length-1])*1000).toLocaleTimeString();
-                    evaluateOverUnder(String(prices[prices.length-1]), lp);
+                    document.getElementById('lastUpdate').innerText = 
+                        'Last: ' + new Date(Number(times[times.length - 1]) * 1000).toLocaleTimeString();
+                    evaluateOverUnder(String(prices[prices.length - 1]), lp);
                 }
                 return;
             }
@@ -800,9 +832,10 @@
                 const raw = String(data.tick.quote);
                 const p = parseFloat(raw);
                 if (!Number.isFinite(p)) return;
-                const t = (data.tick.epoch||0)*1000;
+                const t = (data.tick.epoch || 0) * 1000;
                 document.getElementById('livePrice').innerText = p.toFixed(2);
-                document.getElementById('lastUpdate').innerText = 'Last: ' + new Date(t).toLocaleTimeString();
+                document.getElementById('lastUpdate').innerText = 
+                    'Last: ' + new Date(t).toLocaleTimeString();
                 pushChartPoint(t, p);
                 evaluateOverUnder(raw, p);
             }
@@ -818,21 +851,28 @@
 
     // ---------- History & Sound ----------
     function recordSignal(dir, detail) {
-        tradeHistory.unshift({ time: new Date().toLocaleTimeString(), direction: dir, detail });
+        tradeHistory.unshift({
+            time: new Date().toLocaleTimeString(),
+            direction: dir,
+            detail: detail
+        });
         if (tradeHistory.length > 30) tradeHistory.pop();
         localStorage.setItem(HISTORY_KEY, JSON.stringify(tradeHistory));
         renderHistory();
+
         if (settings.sound) {
             try {
-                if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const o = audioCtx.createOscillator();
                 const g = audioCtx.createGain();
-                o.connect(g); g.connect(audioCtx.destination);
-                o.frequency.value = dir==='over' ? 880 : 440;
+                o.connect(g);
+                g.connect(audioCtx.destination);
+                o.frequency.value = dir === 'over' ? 880 : 440;
                 g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.3);
-                o.start(); o.stop(audioCtx.currentTime+0.3);
-            } catch(e){}
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                o.start();
+                o.stop(audioCtx.currentTime + 0.3);
+            } catch(e) {}
         }
     }
 
@@ -840,11 +880,17 @@
         const body = document.getElementById('historyBody');
         const empty = document.getElementById('emptyHistoryMsg');
         body.innerHTML = '';
-        if (!tradeHistory.length) { empty.style.display='block'; return; }
+        if (!tradeHistory.length) {
+            empty.style.display = 'block';
+            return;
+        }
         empty.style.display = 'none';
         tradeHistory.forEach(item => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${item.time}</td><td class="dir-${item.direction}">${item.direction.toUpperCase()}</td><td>${item.detail}</td>`;
+            tr.innerHTML = `
+                <td>${item.time}</td>
+                <td class="dir-${item.direction}">${item.direction.toUpperCase()}</td>
+                <td>${item.detail}</td>`;
             body.appendChild(tr);
         });
     }
@@ -881,11 +927,11 @@
         try {
             const s = JSON.parse(localStorage.getItem(STORAGE_KEY));
             if (s) settings = Object.assign(settings, s);
-        } catch(e){}
+        } catch(e) {}
         try {
             const h = JSON.parse(localStorage.getItem(HISTORY_KEY));
             if (Array.isArray(h)) tradeHistory = h;
-        } catch(e){}
+        } catch(e) {}
 
         document.getElementById('symbolSelect').value = settings.symbol;
         document.getElementById('stake').value = settings.stake;
